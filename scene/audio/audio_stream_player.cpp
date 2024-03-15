@@ -59,8 +59,8 @@ Ref<AudioStream> AudioStreamPlayer::get_stream() const {
 }
 
 void AudioStreamPlayer::set_volume_db(float p_volume) {
-	if(p_volume == NaN){
-		WARN_PRINT("Provided undefined Audio Stream Player volume");
+	if(p_volume < -6){
+		WARN_PRINT("Provided invalid Audio Stream Player volume");
 		return;
 	}
 
@@ -97,7 +97,7 @@ void AudioStreamPlayer::play(float p_from_pos) {
 	if (stream_playback.is_null()) {
 		return;
 	}
-	ERR_FAIL_COND_MSG(internal->volume_db == NaN, "Invalid Audio Stream Player volume");
+	ERR_FAIL_COND_MSG(internal->volume_db < -6, "Invalid Audio Stream Player volume");
 	
 	AudioServer::get_singleton()->start_playback_stream(stream_playback, internal->bus, _get_volume_vector(), p_from_pos, internal->pitch_scale);
 	internal->ensure_playback_limit();
