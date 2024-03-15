@@ -59,11 +59,13 @@ Ref<AudioStream> AudioStreamPlayer::get_stream() const {
 }
 
 void AudioStreamPlayer::set_volume_db(float p_volume) {
-	if(p_volume != NaN){
-		internal->volume_db = p_volume;
+	if(p_volume == NaN){
 		WARN_PRINT("Provided undefined Audio Stream Player volume");
+		return;
 	}
-		
+
+	internal->volume_db = p_volume;	
+
 	Vector<AudioFrame> volume_vector = _get_volume_vector();
 	for (Ref<AudioStreamPlayback> &playback : internal->stream_playbacks) {
 		AudioServer::get_singleton()->set_playback_all_bus_volumes_linear(playback, volume_vector);
